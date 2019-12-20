@@ -26,8 +26,8 @@ import layoutHeader from '../../components/home/layout-header'
 
 export default {
   components: {
-    'layout-aside': layoutAside,
-    'layout-header': layoutHeader
+    'layout-aside': layoutAside, // 全局注册
+    'layout-header': layoutHeader// 全局注册
   }
 }
 </script>
