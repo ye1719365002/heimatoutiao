@@ -66,11 +66,11 @@ export default {
   methods: {
     submitLogin () {
       // 手动校验
-      this.$refs.myForm.validate(function (isOK) {
+      this.$refs.myForm.validate((isOK) => {
         if (isOK) {
           // 说明校验通过 应该调用登录接口
 
-          this.axios({
+          this.$axios({
             url: '/authorizations', // 请求地址
             method: 'post', // 类型
             data: this.loginForm // nody参数
@@ -79,8 +79,12 @@ export default {
           // 前端缓存 登录成功返回给我们的令牌
 
             window.localStorage.setItem('user-token', result.data.data.token)
+            this.$router.push('/home')
           }).catch(() => {
-
+            this.$message({
+              type: 'warning',
+              message: '手机号或者验证码错误!'
+            })
           })
         }
       })
