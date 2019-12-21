@@ -41,6 +41,7 @@ export default {
         Authorization: `Bearer ${token}`
       }
     }).then(result => {
+      console.log(result)
       this.userInfo = result.data.data
     })
   },
