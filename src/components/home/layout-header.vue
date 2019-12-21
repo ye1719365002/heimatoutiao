@@ -34,12 +34,10 @@ export default {
     }
   },
   created () {
-    let token = localStorage.getItem('user-token')// 获取用户令牌
+    // let token = localStorage.getItem('user-token')// 获取用户令牌
     this.$axios({
-      url: 'user/profile',
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
+      url: 'user/profile'
+
     }).then(result => {
       console.log(result)
       this.userInfo = result.data.data
