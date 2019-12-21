@@ -79,12 +79,7 @@ export default {
           // 前端缓存 登录成功返回给我们的令牌
 
             window.localStorage.setItem('user-token', result.data.token)
-            this.$router.push('/home')
-          }).catch(() => {
-            this.$message({
-              type: 'warning',
-              message: '手机号或者验证码错误!'
-            })
+            this.$router.push('/home')// 跳转到hom页
           })
         }
       })
