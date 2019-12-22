@@ -2,7 +2,7 @@
 <!-- 放置一个容器 -->
     <el-container>
       <!-- 左右布局 -->
-        <el-aside style="background-color:#323745; height:100vh;width:230px">
+        <el-aside style="background-color:#323745;min-height:100vh;width:230px">
           <layout-aside></layout-aside>
         </el-aside>
         <!-- 右侧容器 -->
