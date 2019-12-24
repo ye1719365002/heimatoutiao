@@ -30,7 +30,7 @@ export default {
   data () {
     return {
       userInfo: {}, // 定义一个用户对象
-      defaultImg: require('../../assets/img/短发姑娘.jpg')
+      defaultImg: require('../../assets/img/duanfa.jpg')
     }
   },
   created () {

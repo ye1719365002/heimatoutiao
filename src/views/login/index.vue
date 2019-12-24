@@ -91,7 +91,7 @@ export default {
 
 <style lang='less' scoped>
   .login{
-    background-image: url('../../assets/img/和之国.jpg');
+    background-image: url('../../assets/img/hezhiguo.jpg');
     height: 100vh;
     background-size: cover;
     display:flex;

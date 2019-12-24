@@ -18,10 +18,23 @@
         <template slot-scope="obj">
           <!-- 作用域插槽 -->
           <el-button size="small" type="text">修改</el-button>
-          <el-button @click="openOrCloseState(obj.row)" size="small" type="text">{{ obj.row.comment_status? '关闭':'打开'}}评论</el-button>
+          <el-button
+            @click="openOrCloseState(obj.row)"
+            size="small"
+            type="text"
+          >{{ obj.row.comment_status? '关闭':'打开'}}评论</el-button>
         </template>
       </el-table-column>
     </el-table>
+    <el-row type='flex' justify="center" align="middle" style="height:80px" >
+        <!-- 分页组件 total总页码  每一页多少条-->
+      <el-pagination background layout="prev, pager, next"
+      :current-page="page.currentPage"
+      :page-size="page.pageSize"
+      :total="page.total"
+      @current-change="changePage"></el-pagination>
+
+    </el-row>
   </el-card>
 </template>
 
@@ -29,16 +42,27 @@
 export default {
   data () {
     return {
-      list: []// 定义一个数据接收返回结果
+      list: [], // 定义一个数据接收返回结果
+      page: {
+        total: 0,
+        pageSize: 10, // 默认每页条数
+        currentPage: 1// 默认页码为1
+      }// 专门存放分页信息数据
     }
   },
   methods: {
+    // 页码改变事件
+    changePage (newPage) {
+      this.page.currentPage = newPage// 最新页码
+      this.getComment()
+    },
     getComment () {
       this.$axios({
         url: '/articles',
-        params: { response_type: 'comment' }
+        params: { response_type: 'comment', page: this.page.currentPage, per_page: this.page.pageSize }
       }).then(result => {
         this.list = result.data.results
+        this.page.total = result.data.total_count // 总条数
       })
     },
     // 定义一个格式化的函数
@@ -58,17 +82,21 @@ export default {
         this.$axios({
           method: 'put',
           url: '/comments/status',
-          params: { article_id: row.id },
+          params: { article_id: row.id.toString() },
           data: { allow_comment: !row.comment_status } // 如果是关闭 就要打开，如果是打开就要关闭
-        }).then(result => {
-          // 表示执行成功
-          this.getComment()// 重新拉取评论管理数据
         })
+          .then(result => {
+            // 表示执行成功
+            this.getComment() // 重新拉取评论管理数据
+          })
+          .catch(() => {
+            debugger
+          })
       })
     }
   },
   created () {
-    this.getComment()// 获取数据
+    this.getComment() // 获取数据
   }
 }
 </script>
