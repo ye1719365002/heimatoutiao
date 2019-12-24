@@ -1,7 +1,7 @@
 <template>
   <!-- 卡片组件 -->
 
-  <el-card>
+  <el-card v-loading="true">
     <bread-crumb slot="header">
       <!-- 插槽内容 -->
       <template slot="title">评论管理</template>
@@ -43,6 +43,7 @@ export default {
   data () {
     return {
       list: [], // 定义一个数据接收返回结果
+      loading: false, // 默认不打开进度条
       page: {
         total: 0,
         pageSize: 10, // 默认每页条数
@@ -57,12 +58,14 @@ export default {
       this.getComment()
     },
     getComment () {
+      this.loading = true// 打开进度条
       this.$axios({
         url: '/articles',
         params: { response_type: 'comment', page: this.page.currentPage, per_page: this.page.pageSize }
       }).then(result => {
         this.list = result.data.results
         this.page.total = result.data.total_count // 总条数
+        this.loading = false// 关闭
       })
     },
     // 定义一个格式化的函数
