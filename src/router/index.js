@@ -17,10 +17,16 @@ const routes = [
     children: [{
       path: '',
       component: Home2
-    }, {
+    },
+    {
       path: 'comment',
       component: () => import('../views/comment')
-    }]
+    }
+    // {
+    //   path: 'material',
+    //   component: () => import('../views/material')
+    // }
+    ]
   }, {
     path: '/login',
     component: Login

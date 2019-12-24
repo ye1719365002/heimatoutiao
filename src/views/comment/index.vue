@@ -1,7 +1,7 @@
 <template>
   <!-- 卡片组件 -->
 
-  <el-card v-loading="true">
+  <el-card :loading="true">
     <bread-crumb slot="header">
       <!-- 插槽内容 -->
       <template slot="title">评论管理</template>
