@@ -23,8 +23,8 @@
             <img :src="item.url" alt="">
             <el-row class="operate" type="flex" align="middle" justify="space-around" >
               <!-- 需要根据当前是否收藏的状态来决定 是否给字体颜色 -->
-              <i class="el-icon-star-on"></i>
-              <i class="el-icon-delete-solid"></i>
+              <i @click="collectOrCancel (item)" :style="{color:item.is_collected?'red':'#000'} " class="el-icon-star-on"></i>
+              <i @click="delMaterial(item.id)" class="el-icon-delete-solid"></i>
             </el-row>
           </el-card>
         </div>
@@ -43,7 +43,7 @@
         <!-- 公共分页组件 -->
        <el-row type="flex" justify="center">
           <el-pagination
-              :current-page="page.currentPge"
+              :current-page="page.currentPage"
               :page-size="page.pageSize"
               :total="page.total"
               @current-change="changePage"
@@ -65,12 +65,37 @@ export default {
       list: [], // 接收素材数据
       page: {
         currenPage: 1,
-        pageSize: 9,
+        pageSize: 8,
         total: 0
       }
     }
   },
   methods: {
+    // 删除用户图片素材
+    delMaterial (id) {
+      this.$confirm('你确定要删除此图片吗?').then(() => {
+        this.$axios({
+          method: 'delete',
+          url: `/user/images/${id}`
+        }).then(() => {
+          this.getMaterial() // 重新拉取数据
+        })
+      })
+    },
+    // 取消或者收藏
+    collectOrCancel (item) {
+      // item.iscollected true => 取消收藏 ? 收藏
+      this.$axios({
+        method: 'put',
+        url: `/user/images/${item.id}`,
+        data: {
+          collect: !item.is_collected // 取反 因为 收藏  =>取消收藏
+        }
+      }).then(result => {
+        this.getMaterial() // 重新拉取数据
+      })
+    },
+
     // 上传图片的方法
     uploadImg (params) {
       this.loading = true // 先弹个层
@@ -105,10 +130,11 @@ export default {
           collect: this.activeName === 'collect'// 传false是获取所有的数据 传true是获取收藏数据
         }
       }).then(result => {
+      // console.log(result)
         this.list = result.data.results// 获取所有的图片数据
         this.page.total = result.data.total_count// 总条数
-        this.page.currentPage = result.data.results.page
-        this.page.pageSize = result.data.results.per_page
+        this.page.currentPage = result.data.page
+        this.page.pageSize = result.data.per_page
       })
     }
   },
@@ -123,9 +149,9 @@ export default {
     display: flex;
     flex-wrap: wrap;
     .img-card{
-      width: 200px;
+      width: 180px;
       height: 200px;
-      margin: 20px 50px;
+      margin: 20px 35px;
       position: relative;
       img{
         width: 100%;
@@ -139,6 +165,9 @@ export default {
         font-size: 20px;
         height: 36px;
         background-color: #f4f5f6;
+        i{
+          cursor: pointer;
+        }
       }
     }
   }
