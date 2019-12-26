@@ -25,6 +25,9 @@ const routes = [
     {
       path: 'material',
       component: () => import('../views/material')
+    }, {
+      path: 'articles', // 文章列表
+      component: () => import('../views/articles')
     }
     ]
   }, {
