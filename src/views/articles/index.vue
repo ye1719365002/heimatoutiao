@@ -4,7 +4,7 @@
         <template slot="title">文章列表</template>
         </bread-crumb>
         <!-- 表单容器 -->
-        <el-form style="padding-left:50px">
+        <el-form  style="padding-left:50px">
             <el-form-item label = "文章状态：">
                 <!-- 放置一个单选组  文章状态，0-草稿，1-待审核，2-审核通过，3-审核失败，4-已删除，不传为全部 -->
                  <el-radio-group v-model="searchForm.status" @change="changeCondition">
