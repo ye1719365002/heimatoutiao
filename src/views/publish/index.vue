@@ -72,38 +72,67 @@ export default {
 
     }
   },
-  methods: {
-    //   获取所有的频道
-    getChannels () {
-      this.$axios({
-        url: '/channels'
-      }).then(result => {
-        this.channels = result.data.channels
-      })
-    },
-    // 发布文章
-    publishArticle (draft) {
-      this.$refs.publishForm.validate(isOK => {
-        if (isOK) {
-          this.$axios({
-            url: '/articles',
-            method: 'post',
-            params: { draft }, // 查询参数
-            data: this.formData// 请求体参数
-          }).then(() => {
-            this.$message({
-              type: 'success',
-              message: '保存成功'
-            })
-            // 跳转到文章列表页
-            this.$router.push('/home/articles')
-          })
+  watch: {
+    // 处理两个地址对应同一个组件跳转的时候 组件不销毁 但是数据没有重置的问题
+    $route: function (to, from) {
+      if (to.params.articleId) {
+        // 是修改
+      } else {
+        // 是发布
+        this.formData = {
+          title: '', // 文章标题
+          content: '', // 文章内容
+          cover: {
+            type: 0, // 封面类型 -1:自动，0-无图，1-1张，3-3张
+            images: []// 放置封面地质的数组
+          },
+          channel_id: null// 频道id
+
         }
-      })
+      }
+    },
+    methods: {
+    //   获取所有的频道
+      getChannels () {
+        this.$axios({
+          url: '/channels'
+        }).then(result => {
+          this.channels = result.data.channels
+        })
+      },
+      // 发布文章
+      publishArticle (draft) {
+        this.$refs.publishForm.validate(isOK => {
+          if (isOK) {
+            this.$axios({
+              url: '/articles',
+              method: 'post',
+              params: { draft }, // 查询参数
+              data: this.formData// 请求体参数
+            }).then(() => {
+              this.$message({
+                type: 'success',
+                message: '保存成功'
+              })
+              // 跳转到文章列表页
+              this.$router.push('/home/articles')
+            })
+          }
+        })
+      },
+      geiArticleById (articleId) {
+        this.$axios({
+          url: `/article/${articleId}`
+        }).then(result => {
+          this.formData = result.data// 将数值返回给data
+        })
+      }
     }
   },
   created () {
     this.getChannels()
+    let{ articleId } = this.$route.params
+    articleId && this.geiArticleById(articleId)// 如果文章id存在直接查询文章的数据
   }
 }
 </script>
